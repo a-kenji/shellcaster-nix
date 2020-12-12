@@ -1,0 +1,2 @@
+# shellcaster-nix
+Shellcaster Environment
