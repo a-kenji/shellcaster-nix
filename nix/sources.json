@@ -1,0 +1,74 @@
+{
+    "naersk": {
+        "branch": "master",
+        "description": "Build rust crates in Nix. No configuration, no code generation, no IFD. Sandbox friendly.",
+        "homepage": "",
+        "owner": "nmattia",
+        "repo": "naersk",
+        "rev": "22b96210b2433228d42bce460f3befbdcfde7520",
+        "sha256": "0qa8jnw71qk1i1fgpydx1nv17cnvlydb9jhd6f7gvhglagm19b4v",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/naersk/archive/22b96210b2433228d42bce460f3befbdcfde7520.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "9d35b9e4837ab88517210b1701127612c260eccf",
+        "sha256": "0q50xhnm8g2yfyakrh0nly4swyygxpi0a8cb9gp65wcakcgvzvdh",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/9d35b9e4837ab88517210b1701127612c260eccf.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "release-20.03",
+        "description": "Nix Packages collection",
+        "homepage": null,
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "08d429920bcb2dba1d47c93e5ed30d0f92838c89",
+        "sha256": "0rzf3ln6gmn1dxjz2xx4bkzqhjsdpj54vssablvhq9k9d71hz0fz",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/08d429920bcb2dba1d47c93e5ed30d0f92838c89.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-mozilla": {
+        "branch": "master",
+        "description": "mozilla related nixpkgs (extends nixos/nixpkgs repo)",
+        "homepage": null,
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "rev": "57c8084c7ef41366993909c20491e359bbb90f54",
+        "sha256": "0lchhjys1jj8fdiisd2718sqd63ys7jrj6hq6iq9l1gxj3mz2w81",
+        "type": "tarball",
+        "url": "https://github.com/mozilla/nixpkgs-mozilla/archive/57c8084c7ef41366993909c20491e359bbb90f54.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-unstable": {
+        "branch": "nixpkgs-unstable",
+        "description": "Nix Packages collection",
+        "homepage": null,
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "30e98a4fd67c71277ee95c58c8fd691b69a09183",
+        "sha256": "107f1iq96cs6j7pmwi8628j857jn5gxqfqcbgmw3s2xf6irjjgjw",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/30e98a4fd67c71277ee95c58c8fd691b69a09183.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "shellcaster": {
+        "branch": "develop",
+        "description": "Terminal-based podcast manager built in Rust",
+        "homepage": "",
+        "owner": "jeff-hughes",
+        "repo": "shellcaster",
+        "rev": "a3be71259dd7bc0c1118c3279e73ac6949d3a0b5",
+        "sha256": "1g4j1fhj4b65051rir1z3dksfv3a2jvm8p85p9i10qgiprml842n",
+        "type": "tarball",
+        "url": "https://github.com/jeff-hughes/shellcaster/archive/a3be71259dd7bc0c1118c3279e73ac6949d3a0b5.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

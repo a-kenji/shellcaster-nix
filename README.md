@@ -1,2 +1,21 @@
-# shellcaster-nix
-Shellcaster Environment
+# Shellcaster Environment using Nix.
+
+
+## usage
+- check .envrc
+- check shell.nix
+- check default.nix
+
+## using direnv & lorri
+- 'direnv allow'
+
+## using nix
+- 'nix-shell'
+
+## build
+- 'nix-build ./default.nix'
+- 'cargo build'
+
+## dependencies
+- 'niv update ' / 'nix update [pkg-name]'
+
