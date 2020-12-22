@@ -281,7 +281,9 @@ impl<'a> UI<'a> {
                         Some(a @ UserAction::Down)
                         | Some(a @ UserAction::Up)
                         | Some(a @ UserAction::Left)
-                        | Some(a @ UserAction::Right) => {
+                        | Some(a @ UserAction::Right)
+                        | Some(a @ UserAction::PageUp)
+                        | Some(a @ UserAction::PageDown) => {
                             self.move_cursor(a, curr_pod_id, curr_ep_id)
                         }
 
@@ -526,6 +528,70 @@ impl<'a> UI<'a> {
                     det.refresh();
                 }
             }
+
+            UserAction::PageUp => {
+                match self.active_menu {
+                    ActiveMenu::PodcastMenu => {
+                        if curr_pod_id.is_some() {
+                            self.podcast_menu.scroll(- self.n_row);
+
+                            self.episode_menu.top_row = 0;
+                            self.episode_menu.selected = 0;
+
+                            // update episodes menu with new list
+                            self.episode_menu.items = self.podcast_menu.get_episodes();
+                            self.episode_menu.update_items();
+                            self.update_details_panel();
+                        }
+                    }
+                    ActiveMenu::EpisodeMenu => {
+                        if curr_pod_id.is_some() {
+                            if self.episode_menu.selected == 0 {
+                            for _ in 0..self.n_row+3 {
+                            self.episode_menu.scroll( - 1);
+                            }
+                            }
+                            else {
+                            self.episode_menu.scroll(-self.n_row + 3);
+                            }
+                            }
+                            self.update_details_panel();
+                        }
+                }
+            }
+
+            UserAction::PageDown => {
+                match self.active_menu {
+                    ActiveMenu::PodcastMenu => {
+                        if curr_pod_id.is_some() {
+                            self.podcast_menu.scroll(self.n_row);
+
+                            self.episode_menu.top_row = 0;
+                            self.episode_menu.selected = 0;
+
+                            // update episodes menu with new list
+                            self.episode_menu.items = self.podcast_menu.get_episodes();
+                            self.episode_menu.update_items();
+                            self.update_details_panel();
+                        }
+                    }
+                    ActiveMenu::EpisodeMenu => {
+                        if curr_pod_id.is_some() {
+                            if self.episode_menu.selected == self.n_row - 4 {
+                            //for _ in 0..self.n_row-4 {
+                            //self.episode_menu.scroll(1);
+                            //}
+                            self.episode_menu.scroll(self.n_row - 3);
+                            }
+                            else {
+                            self.episode_menu.scroll(self.n_row - 3);
+                            }
+                            }
+                            self.update_details_panel();
+                        }
+                    }
+                }
+
 
             // this shouldn't occur because we only trigger this
             // function when the UserAction is Up, Down, Left, or Right.

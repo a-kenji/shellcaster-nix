@@ -121,8 +121,9 @@ impl<T: Clone + Menuable> Menu<T> {
     /// represent the new visible list.
     pub fn scroll(&mut self, lines: i32) {
         let mut old_selected;
-        let old_played;
-        let new_played;
+        //let old_played;
+        //let new_played;
+        let apply_color_type;
 
         let list_len = self.items.len();
         if list_len == 0 {
@@ -143,6 +144,17 @@ impl<T: Clone + Menuable> Menu<T> {
             self.selected = abs_bottom;
         }
 
+
+
+        // given a selection, apply correct play status and highlight
+        apply_color_type = | menu: &mut Menu<T> , selected, color : ColorType | {
+            let played = menu.items
+                .map_single_by_index(menu.get_menu_idx(selected), |el| el.is_played())
+                .unwrap();
+            menu.set_attrs(selected, played, color);
+        };
+
+
         // scroll list if necessary:
         // scroll down
         if self.selected > (n_row - 1) {
@@ -153,6 +165,12 @@ impl<T: Clone + Menuable> Menu<T> {
                     el.get_title(self.panel.get_cols() as usize)
                 })
             {
+                //let test = self
+                    //.items
+                    //.map_by_range((self.top_row + n_row) as usize, (self.top_row + 2 * n_row) as usize, |el| {
+                        //Some(el.get_title(self.panel.get_cols() as usize))});
+
+                //println!("{:?}",test);
                 self.top_row += 1;
                 self.panel.delete_line(self.start_row);
                 old_selected -= 1;
@@ -176,17 +194,20 @@ impl<T: Clone + Menuable> Menu<T> {
             }
         }
 
-        old_played = self
-            .items
-            .map_single_by_index(self.get_menu_idx(old_selected), |el| el.is_played())
-            .unwrap();
-        new_played = self
-            .items
-            .map_single_by_index(self.get_menu_idx(self.selected), |el| el.is_played())
-            .unwrap();
 
-        self.set_attrs(old_selected, old_played, ColorType::Normal);
-        self.set_attrs(self.selected, new_played, ColorType::HighlightedActive);
+        apply_color_type(self, old_selected, ColorType::Normal);
+        apply_color_type(self, self.selected, ColorType::HighlightedActive);
+        //old_played = self
+            //.items
+            //.map_single_by_index(self.get_menu_idx(old_selected), |el| el.is_played())
+            //.unwrap();
+        //new_played = self
+            //.items
+            //.map_single_by_index(self.get_menu_idx(self.selected), |el| el.is_played())
+            //.unwrap();
+
+        //self.set_attrs(old_selected, old_played, ColorType::Normal);
+        //self.set_attrs(self.selected, new_played, ColorType::HighlightedActive);
         self.panel.refresh();
     }
 
