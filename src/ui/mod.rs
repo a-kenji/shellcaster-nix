@@ -552,7 +552,7 @@ impl<'a> UI<'a> {
                             }
                             }
                             else {
-                            self.episode_menu.scroll(-self.n_row + 3);
+                            self.episode_menu.scroll( - self.n_row + 3);
                             }
                             }
                             self.update_details_panel();
@@ -578,16 +578,14 @@ impl<'a> UI<'a> {
                     ActiveMenu::EpisodeMenu => {
                         if curr_pod_id.is_some() {
                             if self.episode_menu.selected == self.n_row - 4 {
-                            //for _ in 0..self.n_row-4 {
-                            //self.episode_menu.scroll(1);
-                            //}
-                            self.episode_menu.scroll(self.n_row - 3);
+                                self.episode_menu.scroll( self.n_row - 1 );
                             }
                             else {
-                            self.episode_menu.scroll(self.n_row - 3);
-                            }
+                                //println!("{:?} {:?}",self.n_row,self.episode_menu.selected);
+                                self.episode_menu.scroll( self.n_row - self.episode_menu.selected - 4 );
                             }
                             self.update_details_panel();
+                            }
                         }
                     }
                 }

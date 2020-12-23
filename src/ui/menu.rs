@@ -124,6 +124,7 @@ impl<T: Clone + Menuable> Menu<T> {
         //let old_played;
         //let new_played;
         let apply_color_type;
+        let titles;
 
         let list_len = self.items.len();
         if list_len == 0 {
@@ -131,6 +132,8 @@ impl<T: Clone + Menuable> Menu<T> {
         }
 
         let n_row = self.panel.get_rows();
+        let max_lines = list_len as i32 + self.start_row-1;
+        let check_max = | lines | min(lines, max_lines);
 
         // TODO: currently only handles scroll value of 1; need to extend
         // to be able to scroll multiple lines at a time
@@ -144,70 +147,65 @@ impl<T: Clone + Menuable> Menu<T> {
             self.selected = abs_bottom;
         }
 
-
-
         // given a selection, apply correct play status and highlight
-        apply_color_type = | menu: &mut Menu<T> , selected, color : ColorType | {
+        apply_color_type = | menu: &mut Menu<T>, selected, color : ColorType | {
             let played = menu.items
                 .map_single_by_index(menu.get_menu_idx(selected), |el| el.is_played())
                 .unwrap();
             menu.set_attrs(selected, played, color);
         };
 
+        // return a vec with sorted titles in range start, end (exclusive)
+        titles = | menu: &mut Menu<T>, start, end |
+            menu
+            .items
+            .map_by_range(start, end, |el| {
+                Some(el.get_title(menu.panel.get_cols() as usize))});
 
         // scroll list if necessary:
         // scroll down
-        if self.selected > (n_row - 1) {
-            self.selected = n_row - 1;
-            if let Some(title) = self
-                .items
-                .map_single_by_index((self.top_row + n_row) as usize, |el| {
-                    el.get_title(self.panel.get_cols() as usize)
-                })
-            {
-                //let test = self
-                    //.items
-                    //.map_by_range((self.top_row + n_row) as usize, (self.top_row + 2 * n_row) as usize, |el| {
-                        //Some(el.get_title(self.panel.get_cols() as usize))});
+        if (self.selected) > (n_row - 1) {
+            match &mut titles(self, (self.top_row + n_row) as usize, (check_max(lines + self.top_row + n_row)) as usize)
+            .into_iter(){
+                i => {
+                    while let Some(title) = i.next() {
 
-                //println!("{:?}",test);
-                self.top_row += 1;
-                self.panel.delete_line(self.start_row);
-                old_selected -= 1;
+                        self.top_row += 1;
+                        self.panel.delete_line(self.start_row);
+                        old_selected -= 1;
 
-                self.panel.delete_line(n_row - 1);
-                self.panel.write_line(n_row - 1, title);
+                        self.panel.delete_line(n_row - 1);
+                        self.panel.write_line(n_row - 1, title);
+
+                        apply_color_type(self, old_selected, ColorType::Normal);
+                        old_selected = self.selected;
+                        apply_color_type(self, old_selected, ColorType::Normal);
+                        self.selected = n_row - (i.len() as i32 + 1);
+                    }
+                        //self.selected = n_row - 1;
+                }
             }
 
         // scroll up
         } else if self.selected < self.start_row {
             self.selected = self.start_row;
-            if let Some(title) = self
-                .items
-                .map_single_by_index((self.top_row - 1) as usize, |el| {
-                    el.get_title(self.panel.get_cols() as usize)
-                })
-            {
-                self.top_row -= 1;
-                self.panel.insert_line(self.start_row, title);
-                old_selected += 1;
+            match &mut titles(self, (self.top_row + lines) as usize, (self.top_row) as usize)
+            .into_iter(){
+                i => {
+                    while let Some(title) = i.next(){
+                        self.top_row -= 1;
+                        self.panel.insert_line(self.start_row, title);
+                        old_selected += 1;
+                        apply_color_type(self, old_selected, ColorType::Normal);
             }
+                }}
         }
+            //println!("{:?}",titles(self, (lines) as usize, (self.top_row) as usize));
 
 
         apply_color_type(self, old_selected, ColorType::Normal);
         apply_color_type(self, self.selected, ColorType::HighlightedActive);
-        //old_played = self
-            //.items
-            //.map_single_by_index(self.get_menu_idx(old_selected), |el| el.is_played())
-            //.unwrap();
-        //new_played = self
-            //.items
-            //.map_single_by_index(self.get_menu_idx(self.selected), |el| el.is_played())
-            //.unwrap();
 
-        //self.set_attrs(old_selected, old_played, ColorType::Normal);
-        //self.set_attrs(self.selected, new_played, ColorType::HighlightedActive);
         self.panel.refresh();
     }
 
