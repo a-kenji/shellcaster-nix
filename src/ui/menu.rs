@@ -123,7 +123,7 @@ impl<T: Clone + Menuable> Menu<T> {
     pub fn scroll(&mut self, lines: i32) {
         let mut old_selected;
         let apply_color_type;
-        let titles;
+        let get_titles;
         let checked_lines;
 
         let list_len = self.items.len();
@@ -136,7 +136,7 @@ impl<T: Clone + Menuable> Menu<T> {
         let check_max = | lines | min(lines, max_lines);
 
         // check the bounds of lines and adjust accordingly
-        if let Some(_) = lines.checked_add(self.top_row + n_row){
+        if lines.checked_add(self.top_row + n_row).is_some() {
             checked_lines = lines;
         } else {
             checked_lines = lines - self.top_row - n_row;
@@ -161,7 +161,7 @@ impl<T: Clone + Menuable> Menu<T> {
         };
 
         // return a vec with sorted titles in range start, end (exclusive)
-        titles = | menu: &mut Menu<T>, start, end |
+        get_titles = | menu: &mut Menu<T>, start, end |
             menu
             .items
             .map_by_range(start, end, |el| {
@@ -170,44 +170,38 @@ impl<T: Clone + Menuable> Menu<T> {
         // scroll list if necessary:
         // scroll down
         if (self.selected) > (n_row - 1) {
-            // for scrolls that don't start at the top
+            // for scrolls that don't start at the bottom
             apply_color_type(self, old_selected, ColorType::Normal);
             let delta = n_row - old_selected - 1;
 
-            match &mut titles(self, (self.top_row + n_row) as usize, (check_max(checked_lines + self.top_row + n_row - delta)) as usize)
-            .into_iter(){
-                i => {
-                    while let Some(title) = i.next() {
-
-                        self.top_row += 1;
-                        self.panel.delete_line(self.start_row);
-                        old_selected -= 1;
-
-                        self.panel.delete_line(n_row - 1);
-                        self.panel.write_line(n_row - 1, title);
-
-                        apply_color_type(self, n_row - 1, ColorType::Normal);
-                    }
-                        self.selected = n_row - 1;
-                }
+            let titles = get_titles(
+                self,
+                (self.top_row + n_row) as usize,
+                (check_max(checked_lines + self.top_row + n_row - delta)) as usize);
+            for title in titles.into_iter() {
+                self.top_row += 1;
+                self.panel.delete_line(self.start_row);
+                old_selected -= 1;
+                self.panel.delete_line(n_row - 1);
+                self.panel.write_line(n_row - 1, title);
+                apply_color_type(self, n_row - 1, ColorType::Normal);
             }
+            self.selected = n_row - 1;
 
         // scroll up
         } else if self.selected < self.start_row {
-            match &mut titles(self, max(0,self.top_row + self.selected) as usize, (self.top_row) as usize)
-            .into_iter().rev() {
-                i => {
-                    while let Some(title) = i.next(){
-                        self.top_row -= 1;
-                        self.panel.insert_line(self.start_row, title);
-                        apply_color_type(self, 1, ColorType::Normal);
-                        old_selected += 1;
-                    }
-                }
+            let titles = get_titles(
+                self,
+                max(0,self.top_row + self.selected) as usize,
+                (self.top_row) as usize);
+            for title in titles.into_iter().rev() {
+                self.top_row -= 1;
+                self.panel.insert_line(self.start_row, title);
+                apply_color_type(self, 1, ColorType::Normal);
+                old_selected += 1;
             }
             self.selected = self.start_row;
         }
-
         apply_color_type(self, old_selected, ColorType::Normal);
         apply_color_type(self, self.selected, ColorType::HighlightedActive);
         self.panel.refresh();
