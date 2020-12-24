@@ -283,7 +283,11 @@ impl<'a> UI<'a> {
                         | Some(a @ UserAction::Left)
                         | Some(a @ UserAction::Right)
                         | Some(a @ UserAction::PageUp)
-                        | Some(a @ UserAction::PageDown) => {
+                        | Some(a @ UserAction::PageDown)
+                        | Some(a @ UserAction::BigUp)
+                        | Some(a @ UserAction::BigDown)
+                        | Some(a @ UserAction::GoTop)
+                        | Some(a @ UserAction::GoBot) => {
                             self.move_cursor(a, curr_pod_id, curr_ep_id)
                         }
 
@@ -450,52 +454,12 @@ impl<'a> UI<'a> {
     {
         match action {
             UserAction::Down => {
-                match self.active_menu {
-                    ActiveMenu::PodcastMenu => {
-                        if curr_pod_id.is_some() {
-                            self.podcast_menu.scroll(1);
-
-                            self.episode_menu.top_row = 0;
-                            self.episode_menu.selected = 0;
-
-                            // update episodes menu with new list
-                            self.episode_menu.items = self.podcast_menu.get_episodes();
-                            self.episode_menu.update_items();
-                            self.update_details_panel();
-                        }
-                    }
-                    ActiveMenu::EpisodeMenu => {
-                        if curr_ep_id.is_some() {
-                            self.episode_menu.scroll(1);
-                            self.update_details_panel();
-                        }
-                    }
+                self.scroll_current_window(curr_pod_id, 1 );
                 }
-            }
 
             UserAction::Up => {
-                match self.active_menu {
-                    ActiveMenu::PodcastMenu => {
-                        if curr_pod_id.is_some() {
-                            self.podcast_menu.scroll(-1);
-
-                            self.episode_menu.top_row = 0;
-                            self.episode_menu.selected = 0;
-
-                            // update episodes menu with new list
-                            self.episode_menu.items = self.podcast_menu.get_episodes();
-                            self.episode_menu.update_items();
-                            self.update_details_panel();
-                        }
-                    }
-                    ActiveMenu::EpisodeMenu => {
-                        if curr_pod_id.is_some() {
-                            self.episode_menu.scroll(-1);
-                            self.update_details_panel();
-                        }
-                    }
+                self.scroll_current_window(curr_pod_id, - 1 );
                 }
-            }
 
             UserAction::Left => {
                 if curr_pod_id.is_some() {
@@ -546,19 +510,12 @@ impl<'a> UI<'a> {
                     }
                     ActiveMenu::EpisodeMenu => {
                         if curr_pod_id.is_some() {
-                            if self.episode_menu.selected == 0 {
-                            for _ in 0..self.n_row+3 {
-                            self.episode_menu.scroll( - 1);
-                            }
-                            }
-                            else {
                             self.episode_menu.scroll( - self.n_row + 3);
                             }
-                            }
                             self.update_details_panel();
+                            }
                         }
                 }
-            }
 
             UserAction::PageDown => {
                 match self.active_menu {
@@ -582,7 +539,7 @@ impl<'a> UI<'a> {
                             }
                             else {
                                 //println!("{:?} {:?}",self.n_row,self.episode_menu.selected);
-                                self.episode_menu.scroll( self.n_row - self.episode_menu.selected - 4 );
+                                self.episode_menu.scroll( self.n_row -  3 );
                             }
                             self.update_details_panel();
                             }
@@ -590,10 +547,55 @@ impl<'a> UI<'a> {
                     }
                 }
 
+            UserAction::BigUp => {
+                self.scroll_current_window( curr_pod_id, - self.n_row / crate::config::BIG_SCROLL_AMOUNT );
+            }
+
+            UserAction::BigDown => {
+                self.scroll_current_window( curr_pod_id, self.n_row / crate::config::BIG_SCROLL_AMOUNT);
+            }
+
+            UserAction::GoTop => {
+                self.scroll_current_window( curr_pod_id, - i32::MAX );
+            }
+
+            UserAction::GoBot => {
+                self.scroll_current_window( curr_pod_id, i32::MAX );
+            }
+
 
             // this shouldn't occur because we only trigger this
-            // function when the UserAction is Up, Down, Left, or Right.
+            // function when the UserAction is Up, Down, Left, Right, BigUp, BigDown,
+            // PageUp, PageDown, GoBot and GoTop
             _ => (),
+        }
+    }
+
+    /// Scrolls the current active menu by
+    /// the specified amount and refreshes
+    /// the window.
+    /// Positive Scroll is down.
+    pub fn scroll_current_window(&mut self,pod_id: Option<i64>, scroll: i32){
+        match self.active_menu {
+            ActiveMenu::PodcastMenu => {
+                if pod_id.is_some() {
+                    self.podcast_menu.scroll(scroll);
+
+                    self.episode_menu.top_row = 0;
+                    self.episode_menu.selected = 0;
+
+                    // update episodes menu with new list
+                    self.episode_menu.items = self.podcast_menu.get_episodes();
+                    self.episode_menu.update_items();
+                    self.update_details_panel();
+                }
+            }
+            ActiveMenu::EpisodeMenu => {
+                if pod_id.is_some() {
+                    self.episode_menu.scroll(scroll);
+                    self.update_details_panel();
+                }
+            }
         }
     }
 

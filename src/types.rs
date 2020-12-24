@@ -364,7 +364,7 @@ impl<T: Clone + Menuable> LockVec<T> {
     /// Maps a closure to every element in the LockVec, in the same way
     /// as the `filter_map()` does on an Iterator, both mapping and
     /// filtering, over a specified range.
-    /// Does not check if the range is valid.
+    /// Does not check if the range is valid!
     /// However, to avoid issues with keeping the borrow
     /// alive, the function returns a Vec of the collected results,
     /// rather than an iterator.

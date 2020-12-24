@@ -1,4 +1,5 @@
 use std::cmp::min;
+use std::cmp::max;
 use std::collections::hash_map::Entry;
 
 use super::ColorType;
@@ -121,10 +122,9 @@ impl<T: Clone + Menuable> Menu<T> {
     /// represent the new visible list.
     pub fn scroll(&mut self, lines: i32) {
         let mut old_selected;
-        //let old_played;
-        //let new_played;
         let apply_color_type;
         let titles;
+        let checked_lines;
 
         let list_len = self.items.len();
         if list_len == 0 {
@@ -132,13 +132,18 @@ impl<T: Clone + Menuable> Menu<T> {
         }
 
         let n_row = self.panel.get_rows();
-        let max_lines = list_len as i32 + self.start_row-1;
+        let max_lines = list_len as i32 + self.start_row;
         let check_max = | lines | min(lines, max_lines);
 
-        // TODO: currently only handles scroll value of 1; need to extend
-        // to be able to scroll multiple lines at a time
+        // check the bounds of lines and adjust accordingly
+        if let Some(_) = lines.checked_add(self.top_row + n_row){
+            checked_lines = lines;
+        } else {
+            checked_lines = lines - self.top_row - n_row;
+        }
+
         old_selected = self.selected;
-        self.selected += lines;
+        self.selected += checked_lines;
 
         // don't allow scrolling past last item in list (if shorter
         // than self.panel.get_rows())
@@ -165,7 +170,11 @@ impl<T: Clone + Menuable> Menu<T> {
         // scroll list if necessary:
         // scroll down
         if (self.selected) > (n_row - 1) {
-            match &mut titles(self, (self.top_row + n_row) as usize, (check_max(lines + self.top_row + n_row)) as usize)
+            // for scrolls that don't start at the top
+            apply_color_type(self, old_selected, ColorType::Normal);
+            let delta = n_row - old_selected - 1;
+
+            match &mut titles(self, (self.top_row + n_row) as usize, (check_max(checked_lines + self.top_row + n_row - delta)) as usize)
             .into_iter(){
                 i => {
                     while let Some(title) = i.next() {
@@ -177,35 +186,30 @@ impl<T: Clone + Menuable> Menu<T> {
                         self.panel.delete_line(n_row - 1);
                         self.panel.write_line(n_row - 1, title);
 
-                        apply_color_type(self, old_selected, ColorType::Normal);
-                        old_selected = self.selected;
-                        apply_color_type(self, old_selected, ColorType::Normal);
-                        self.selected = n_row - (i.len() as i32 + 1);
+                        apply_color_type(self, n_row - 1, ColorType::Normal);
                     }
-                        //self.selected = n_row - 1;
+                        self.selected = n_row - 1;
                 }
             }
 
         // scroll up
         } else if self.selected < self.start_row {
-            self.selected = self.start_row;
-            match &mut titles(self, (self.top_row + lines) as usize, (self.top_row) as usize)
-            .into_iter(){
+            match &mut titles(self, max(0,self.top_row + self.selected) as usize, (self.top_row) as usize)
+            .into_iter().rev() {
                 i => {
                     while let Some(title) = i.next(){
                         self.top_row -= 1;
                         self.panel.insert_line(self.start_row, title);
+                        apply_color_type(self, 1, ColorType::Normal);
                         old_selected += 1;
-                        apply_color_type(self, old_selected, ColorType::Normal);
+                    }
+                }
             }
-                }}
+            self.selected = self.start_row;
         }
-            //println!("{:?}",titles(self, (lines) as usize, (self.top_row) as usize));
-
 
         apply_color_type(self, old_selected, ColorType::Normal);
         apply_color_type(self, self.selected, ColorType::HighlightedActive);
-
         self.panel.refresh();
     }
 
