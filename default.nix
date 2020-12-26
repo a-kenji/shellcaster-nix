@@ -23,7 +23,7 @@ let
     buildInputs = nativeBuildInputs;
 
     # needs to be a function from list to list
-    #cargoOptions = [ "-Z" "unstable-options" ];
+    cargoOptions = opts: opts ++ [ "--features" "sqlite_bundled" ];
 
     compressTarget = false;
 

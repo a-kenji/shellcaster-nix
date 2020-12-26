@@ -39,7 +39,7 @@ let
   # In Emacs with `racer-mode`, you need to set
   # `racer-rust-src-path` to `nil` for it to pick
   # up the environment variable with `direnv`.
-  RUST_SRC_PATH = "${pkgs.rustc.src}/lib/rustlib/src/rust/src/";
+  RUST_SRC_PATH = "${pkgs.rustc.src}/lib/rustlib/x86_64-unknown-linux-gnu/lib/";
   # Set up a local directory to install binaries in
   CARGO_INSTALL_ROOT = "${SHELLCASTER_ROOT}/.cargo";
 
@@ -50,6 +50,7 @@ let
     pkgs.rustc
     pkgs.rustup
     pkgs.rustfmt
+    pkgs.clippy
     unstable.rust-analyzer
     #ruststable
     rustnightly
