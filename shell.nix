@@ -7,9 +7,19 @@ let
   moz_overlay = import sources.nixpkgs-mozilla;
   pkgs = import sources.nixpkgs { overlays = [ moz_overlay ]; };
   unstable = import sources.nixpkgs-unstable { };
-  rustnightly = (pkgs.latest.rustChannels.nightly.rust.override {
-    extensions = [ "rust-src" "rust-analysis" "rustfmt-preview" "clippy-preview"];
-  });
+  channel = "nightly";
+  date = "2021-01-15";
+  targets = [];
+  extensions = ["rust-src" "clippy-preview" "rustfmt-preview" "rust-analyzer-preview"];
+  rustChannelOfTargetsAndExtensions = channel: date: targets: extensions:
+    (pkgs.rustChannelOf { inherit channel date; }).rust.override {
+      inherit targets extensions;
+    };
+  rustChan = rustChannelOfTargetsAndExtensions channel date targets extensions;
+
+  #rustnightly = (pkgs.latest.rustChannels.nightly.rust.override {
+    #extensions = [ "rust-src" "rust-analysis" "rustfmt-preview" "clippy-preview"];
+  #});
   nixpkgs-mozilla = import sources.nixpkgs-mozilla;
   #pkgs = import sources.nixpkgs {
    #overlays =
@@ -46,14 +56,14 @@ let
   RUST_BACKTRACE = 1;
 
   buildInputs = [
-    pkgs.cargo
-    pkgs.rustc
-    pkgs.rustup
-    pkgs.rustfmt
-    pkgs.clippy
-    unstable.rust-analyzer
+    #pkgs.cargo
+    #pkgs.rustc
+    #pkgs.rustup
+    #pkgs.rustfmt
+    #pkgs.clippy
+    #unstable.rust-analyzer
     #ruststable
-    rustnightly
+    rustChan
 
     pkgs.niv
     pkgs.lorri

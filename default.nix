@@ -23,6 +23,7 @@ let
     buildInputs = nativeBuildInputs;
 
     # needs to be a function from list to list
+    # bundles for better nix compatibility
     cargoOptions = opts: opts ++ [ "--features" "sqlite_bundled" ];
 
     compressTarget = false;
