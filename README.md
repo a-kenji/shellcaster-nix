@@ -2,6 +2,7 @@
 
 
 ## usage
+- 'git clone [fork]'
 - check .envrc
 - check shell.nix
 - check default.nix
@@ -18,4 +19,3 @@
 
 ## dependencies
 - 'niv update ' / 'nix update [pkg-name]'
-
