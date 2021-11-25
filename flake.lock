@@ -18,11 +18,11 @@
     },
     "flake-utils": {
       "locked": {
-        "lastModified": 1610051610,
-        "narHash": "sha256-U9rPz/usA1/Aohhk7Cmc2gBrEEKRzcW4nwPWMPwja4Y=",
+        "lastModified": 1637014545,
+        "narHash": "sha256-26IZAc5yzlD9FlDT54io1oqG/bBoyka+FJk5guaX4x4=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "3982c9903e93927c2164caa727cd3f6a0e6d14cc",
+        "rev": "bba5dcc8e0b20ab664967ad83d24d64cb64ec4f4",
         "type": "github"
       },
       "original": {
@@ -34,11 +34,11 @@
     "mozilla-overlay": {
       "flake": false,
       "locked": {
-        "lastModified": 1603906276,
-        "narHash": "sha256-RsNPnEKd7BcogwkqhaV5kI/HuNC4flH/OQCC/4W5y/8=",
+        "lastModified": 1637337116,
+        "narHash": "sha256-LKqAcdL+woWeYajs02bDQ7q8rsqgXuzhC354NoRaV80=",
         "owner": "mozilla",
         "repo": "nixpkgs-mozilla",
-        "rev": "8c007b60731c07dd7a052cce508de3bb1ae849b4",
+        "rev": "cbc7435f5b0b3d17b16fb1d20cf7b616eec5e093",
         "type": "github"
       },
       "original": {
@@ -54,11 +54,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1612192764,
-        "narHash": "sha256-7EnLtZQWP6511G1ZPA7FmJlqAr3hWsAYb24tvTvJ/ec=",
+        "lastModified": 1637576998,
+        "narHash": "sha256-bGQ66hh4Dl78T9bd1pqdp6fprHMCkrkeKqED6sDUYqo=",
         "owner": "nmattia",
         "repo": "naersk",
-        "rev": "6e149bfd726a8ebefa415f2d713ba6d942435abd",
+        "rev": "b043f2447a4a761529254f4983cacd94b034a122",
         "type": "github"
       },
       "original": {
@@ -69,11 +69,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1612826724,
-        "narHash": "sha256-E+vAebshQgtnNR+WK1JD6kmSCZZi2U+gXygVRzBTmcY=",
+        "lastModified": 1637859724,
+        "narHash": "sha256-3l29RPUi8mggtM2BV4izJMpdfcE7iGgRysMhbVJGzm4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "35c35e485e3bb06c25c76d681fa19af7fa883120",
+        "rev": "9aecabdf89ba3ebdc556e6d74a93604ad198e97b",
         "type": "github"
       },
       "original": {
@@ -96,11 +96,11 @@
     "shellcaster": {
       "flake": false,
       "locked": {
-        "lastModified": 1606864903,
-        "narHash": "sha256-RuqZJaoiliSyi3mVzx3BuaFqzyEGQv5tz2NWTqU+eP8=",
+        "lastModified": 1631141486,
+        "narHash": "sha256-ETOkONKwbbdcqM6Sbnof7K/ciFqLQhcVwMK92/ara98=",
         "owner": "jeff-hughes",
         "repo": "shellcaster",
-        "rev": "0170b7a89a5849a8d57da84a63719fcfdfa967e3",
+        "rev": "e380c02a0f27fcdc1e3a236b1910f47efbbafadc",
         "type": "github"
       },
       "original": {
