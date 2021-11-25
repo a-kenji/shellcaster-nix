@@ -5,10 +5,10 @@
         "homepage": "",
         "owner": "nmattia",
         "repo": "naersk",
-        "rev": "32e3ba39d9d83098b13720a4384bdda191dd0445",
-        "sha256": "0yxqggmj4c65nzmgjmwxii9ibxmxw9w87pbqpgmnyf5rpyp79nv7",
+        "rev": "b043f2447a4a761529254f4983cacd94b034a122",
+        "sha256": "1ak2sk0fl0x158gbk4h2ffnfk9x7kndddpfn9zy5w3kq33m3lr3c",
         "type": "tarball",
-        "url": "https://github.com/nmattia/naersk/archive/32e3ba39d9d83098b13720a4384bdda191dd0445.tar.gz",
+        "url": "https://github.com/nmattia/naersk/archive/b043f2447a4a761529254f4983cacd94b034a122.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -17,10 +17,10 @@
         "homepage": "https://github.com/nmattia/niv",
         "owner": "nmattia",
         "repo": "niv",
-        "rev": "af958e8057f345ee1aca714c1247ef3ba1c15f5e",
-        "sha256": "1qjavxabbrsh73yck5dcq8jggvh3r2jkbr6b5nlz5d9yrqm9255n",
+        "rev": "5830a4dd348d77e39a0f3c4c762ff2663b602d4c",
+        "sha256": "1d3lsrqvci4qz2hwjrcnd8h5vfkg8aypq3sjd4g3izbc8frwz5sm",
         "type": "tarball",
-        "url": "https://github.com/nmattia/niv/archive/af958e8057f345ee1aca714c1247ef3ba1c15f5e.tar.gz",
+        "url": "https://github.com/nmattia/niv/archive/5830a4dd348d77e39a0f3c4c762ff2663b602d4c.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
@@ -29,10 +29,10 @@
         "homepage": null,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6d1a044fc9ff3cc96fca5fa3ba9c158522bbf2a5",
-        "sha256": "07a3nyrj3pwl017ig0rbn5rbmbf14gl3vqggvkyrdby01726p5fg",
+        "rev": "eb73405ecceb1dc505b7cbbd234f8f94165e2696",
+        "sha256": "06k21wbyhhvq2f1xczszh3c2934p0m02by3l2ixvd6nkwrqklax7",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/6d1a044fc9ff3cc96fca5fa3ba9c158522bbf2a5.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/eb73405ecceb1dc505b7cbbd234f8f94165e2696.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs-mozilla": {
@@ -41,10 +41,10 @@
         "homepage": null,
         "owner": "mozilla",
         "repo": "nixpkgs-mozilla",
-        "rev": "8c007b60731c07dd7a052cce508de3bb1ae849b4",
-        "sha256": "1zybp62zz0h077zm2zmqs2wcg3whg6jqaah9hcl1gv4x8af4zhs6",
+        "rev": "cbc7435f5b0b3d17b16fb1d20cf7b616eec5e093",
+        "sha256": "1kapba23cy3y1ghyqpm0rapbrfj3qdkd7v58c6g8bhpys9qq1aic",
         "type": "tarball",
-        "url": "https://github.com/mozilla/nixpkgs-mozilla/archive/8c007b60731c07dd7a052cce508de3bb1ae849b4.tar.gz",
+        "url": "https://github.com/mozilla/nixpkgs-mozilla/archive/cbc7435f5b0b3d17b16fb1d20cf7b616eec5e093.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs-unstable": {
@@ -53,10 +53,10 @@
         "homepage": null,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8389dcb67d934ee72c1d1e7228d92be9b3f71bad",
-        "sha256": "18k4cri6cl3fl3jw9xybgkzlx77y1q2mqkqrsyv5h9hs58md1xmf",
+        "rev": "98747f27ecfee70c8c97b195cbb94df80a074dda",
+        "sha256": "04ss525ns5qqlggrdhvc6y4hqmshylda9yd0y99ddliyn15wmf27",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/8389dcb67d934ee72c1d1e7228d92be9b3f71bad.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/98747f27ecfee70c8c97b195cbb94df80a074dda.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "shellcaster": {
@@ -65,10 +65,10 @@
         "homepage": "",
         "owner": "jeff-hughes",
         "repo": "shellcaster",
-        "rev": "d12c9b6b2a3cf0f1efa345bd7b3e5045a3c878b3",
-        "sha256": "18imp321893zda9fhb8vj1x0cv8zyg990m2ps8giigag8yj46yx9",
+        "rev": "c672b56df6753fda031f470060c3a9f13696f138",
+        "sha256": "0al5bvjhsrr7bx1hc4041lm1niqxhwac674ldmr0ng6lnwr9bgz3",
         "type": "tarball",
-        "url": "https://github.com/jeff-hughes/shellcaster/archive/d12c9b6b2a3cf0f1efa345bd7b3e5045a3c878b3.tar.gz",
+        "url": "https://github.com/jeff-hughes/shellcaster/archive/c672b56df6753fda031f470060c3a9f13696f138.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
