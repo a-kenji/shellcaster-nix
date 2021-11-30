@@ -64,6 +64,7 @@
       pkgs.nixpkgs-fmt
       pkgs.git
       pkgs.shellcheck
+      pkgs.treefmt
     ];
 
     nativeBuildInputs = [pkgs.ncurses6 pkgs.pkg-config pkgs.openssl pkgs.sqlite];
