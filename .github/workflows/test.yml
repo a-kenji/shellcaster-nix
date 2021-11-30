@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
 jobs:
-  tests:
+  nix-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2.4.0
@@ -11,7 +11,26 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    #- name: Print nixpkgs version
-      #run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
     - run: nix build
+  nix-flake-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v16
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - run: nix flake check --impure
+  nixfmt:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v16
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      nix_path: nixpkgs=channel:nixos-unstable
+      # Nix Flakes doesn't work on shallow clones
+      fetch-depth: 0
+    - name: "treefmt - nixfmt"
+      run: nix-shell -p pkgs.treefmt pkgs.nixpkgs-fmt --command "treefmt --fail-on-change"
