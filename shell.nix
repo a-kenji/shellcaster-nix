@@ -1,5 +1,4 @@
-{
-  isDevelopmentShell ? true
+{ isDevelopmentShell ? true
 }:
 
 let
@@ -9,8 +8,8 @@ let
   unstable = import sources.nixpkgs-unstable { };
   channel = "nightly";
   date = "2021-01-15";
-  targets = [];
-  extensions = ["rust-src" "clippy-preview" "rustfmt-preview" "rust-analyzer-preview"];
+  targets = [ ];
+  extensions = [ "rust-src" "clippy-preview" "rustfmt-preview" "rust-analyzer-preview" ];
   rustChannelOfTargetsAndExtensions = channel: date: targets: extensions:
     (pkgs.rustChannelOf { inherit channel date; }).rust.override {
       inherit targets extensions;
@@ -18,22 +17,22 @@ let
   rustChan = rustChannelOfTargetsAndExtensions channel date targets extensions;
 
   #rustnightly = (pkgs.latest.rustChannels.nightly.rust.override {
-    #extensions = [ "rust-src" "rust-analysis" "rustfmt-preview" "clippy-preview"];
+  #extensions = [ "rust-src" "rust-analysis" "rustfmt-preview" "clippy-preview"];
   #});
   nixpkgs-mozilla = import sources.nixpkgs-mozilla;
   #pkgs = import sources.nixpkgs {
-   #overlays =
-          #[
-            #nixpkgs-mozilla
-            #(
-              #self: super:
-                #{
-                  #rustc = self.latest.rustChannels.nightly.rust;
-                  #cargo = self.latest.rustChannels.nightly.rust;
-                #}
-            #)
-          #];
-        #};
+  #overlays =
+  #[
+  #nixpkgs-mozilla
+  #(
+  #self: super:
+  #{
+  #rustc = self.latest.rustChannels.nightly.rust;
+  #cargo = self.latest.rustChannels.nightly.rust;
+  #}
+  #)
+  #];
+  #};
 
   # The root directory of this project
   SHELLCASTER_ROOT = toString ./shellcaster;
@@ -73,7 +72,7 @@ let
     pkgs.shellcheck
   ];
 
-    nativeBuildInputs = [pkgs.ncurses6 pkgs.pkg-config pkgs.openssl pkgs.sqlite];
+  nativeBuildInputs = [ pkgs.ncurses6 pkgs.pkg-config pkgs.openssl pkgs.sqlite ];
 
 in
 
@@ -106,6 +105,6 @@ pkgs.mkShell {
     ''}
       # restore stdout and close 3
       exec 1>&3-
-    '';
+  '';
 
 }
