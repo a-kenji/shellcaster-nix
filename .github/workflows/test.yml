@@ -6,7 +6,7 @@ jobs:
   nix-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -15,7 +15,7 @@ jobs:
   nix-flake-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -24,7 +24,7 @@ jobs:
   nixfmt:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
