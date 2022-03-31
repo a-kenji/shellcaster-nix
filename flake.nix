@@ -1,15 +1,10 @@
 {
-  description = "A very basic flake";
+  description = "Shellcaster Nix Environment";
 
   inputs = {
-    # To update all inputs:
-    # $ nix flake update --recreate-lock-file
 
     shellcaster.url = "github:jeff-hughes/shellcaster";
     shellcaster.flake = false;
-
-    #local.url = "files:./shellcaster";
-    #local.flake = false;
 
     nixpkgs.url = "github:NixOS/nixpkgs/master";
     flake-utils.url = "github:numtide/flake-utils";
@@ -29,10 +24,8 @@
   outputs = { self, nixpkgs, flake-utils, naersk, mozilla-overlay, devshell, shellcaster }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        #pkgs = nixpkgs.legacyPackages."${system}";
         pkgs = import nixpkgs {
           inherit system overlays;
-          # Makes the config pure as well. See <nixpkgs>/top-level/impure.nix:
         };
 
         overlays = [
@@ -57,13 +50,10 @@
 
         buildInputs = [
           rustChan
+        ];
 
-          pkgs.niv
-          pkgs.lorri
-          pkgs.direnv
-          pkgs.nixpkgs-fmt
-          pkgs.git
-          pkgs.shellcheck
+        fmtInputs = [
+          pkgs.alejandra
           pkgs.treefmt
         ];
 
@@ -73,17 +63,10 @@
         # bundles for better nix compatibility
         #cargoOptions = opts: opts ++ [ "--features" "sqlite_bundled" ];
 
-        # Needed for racer “jump to definition” editor support
-        # In Emacs with `racer-mode`, you need to set
-        # `racer-rust-src-path` to `nil` for it to pick
-        # up the environment variable with `direnv`.
-        RUST_SRC_PATH = "${pkgs.rustc.src}/lib/rustlib/x86_64-unknown-linux-gnu/lib/";
-
         RUST_BACKTRACE = 1;
 
       in
       rec {
-        # `nix build`
         packages.shellcaster = naersk-lib.buildPackage {
           pname = "shellcaster";
           root = shellcaster;
@@ -91,22 +74,23 @@
         };
         defaultPackage = packages.shellcaster;
 
-        # `nix run`
         apps.shellcaster = flake-utils.lib.mkApp {
           drv = packages.shellcaster;
         };
         defaultApp = apps.shellcaster;
 
-        # `nix develop`
-        #devShell = pkgs.mkDevShell {
-        #packages = nativeBuildInputs ++ buildInputs;
-        #env = { inherit RUST_SRC_PATH RUST_BACKTRACE;};
-        #motd = "hello";
-        #};
-        #});
-        devShell = pkgs.mkShell {
-          name = "shellcaster";
-          inherit nativeBuildInputs buildInputs;
+        devShells = {
+          shellcaster = pkgs.mkShell {
+          name = "shellcaster-env";
+          inherit buildInputs;
+          nativeBuildInputs = nativeBuildInputs ++ fmtInputs;
         };
+        fmtShell = pkgs.mkShell {
+          name = "fmtShell";
+          buildInputs = fmtInputs;
+        };
+        devShell = devShells.shellcaster;
+      };
+
       });
 }
