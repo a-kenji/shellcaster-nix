@@ -5,24 +5,16 @@
     shellcaster.flake = false;
     nixpkgs.url = "github:NixOS/nixpkgs/master";
     flake-utils.url = "github:numtide/flake-utils";
-    devshell.url = "github:numtide/devshell/packages-from";
     naersk.url = "github:nmattia/naersk";
     naersk.inputs.nixpkgs.follows = "nixpkgs";
-    mozilla-overlay = {
-      type = "github";
-      owner = "mozilla";
-      repo = "nixpkgs-mozilla";
-      flake = false;
-    };
-    #oxalica-rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
   outputs =
     { self
     , nixpkgs
     , flake-utils
     , naersk
-    , mozilla-overlay
-    , devshell
+    , rust-overlay
     , shellcaster
     }:
     flake-utils.lib.eachDefaultSystem
@@ -31,23 +23,26 @@
         let
           pkgs = import nixpkgs { inherit system overlays; };
           overlays = [
-            ( import mozilla-overlay )
-            devshell.overlay
+            ( import rust-overlay )
             naersk.overlay
-            #self.overlay
           ];
           naersk-lib = naersk.lib."${ system }";
-          channel = "nightly";
-          targets = [ ];
-          date = "2021-01-15";
-          extensions = [ "rust-src" "clippy-preview" "rustfmt-preview" "rust-analyzer-preview" ];
-          rustChannelOfTargetsAndExtensions =
-            channel:
-            date:
-            targets:
-            extensions: ( pkgs.rustChannelOf { inherit channel date; } ).rust.override { inherit targets extensions; };
-          rustChan = rustChannelOfTargetsAndExtensions channel date targets extensions;
-          buildInputs = [ rustChan ];
+
+          rustToolchainToml = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain;
+          cargo = rustToolchainToml;
+          rustc = rustToolchainToml;
+
+          #channel = "nightly";
+          #targets = [ ];
+          #date = "2021-01-15";
+          #extensions = [ "rust-src" "clippy-preview" "rustfmt-preview" "rust-analyzer-preview" ];
+          #rustChannelOfTargetsAndExtensions =
+            #channel:
+            #date:
+            #targets:
+            #extensions: ( pkgs.rustChannelOf { inherit channel date; } ).rust.override { inherit targets extensions; };
+          #rustChan = rustChannelOfTargetsAndExtensions channel date targets extensions;
+          buildInputs = [ rustToolchainToml ];
           fmtInputs = [ pkgs.alejandra pkgs.treefmt ];
           nativeBuildInputs = [ pkgs.ncurses6 pkgs.pkg-config pkgs.openssl pkgs.sqlite ];
           # needs to be a function from list to list
@@ -80,8 +75,8 @@
                   name = "fmtShell";
                   buildInputs = fmtInputs;
                 };
-            devShell = devShells.shellcaster;
           };
+            devShell = devShells.shellcaster;
         }
       );
 }
