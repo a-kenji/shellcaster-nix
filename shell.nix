@@ -1,6 +1,5 @@
 { isDevelopmentShell ? true
 }:
-
 let
   sources = import ./nix/sources.nix { };
   moz_overlay = import sources.nixpkgs-mozilla;
@@ -10,12 +9,11 @@ let
   date = "2021-01-15";
   targets = [ ];
   extensions = [ "rust-src" "clippy-preview" "rustfmt-preview" "rust-analyzer-preview" ];
-  rustChannelOfTargetsAndExtensions = channel: date: targets: extensions:
-    (pkgs.rustChannelOf { inherit channel date; }).rust.override {
-      inherit targets extensions;
-    };
+  rustChannelOfTargetsAndExtensions =
+    channel:
+    date:
+    targets: extensions: ( pkgs.rustChannelOf { inherit channel date; } ).rust.override { inherit targets extensions; };
   rustChan = rustChannelOfTargetsAndExtensions channel date targets extensions;
-
   #rustnightly = (pkgs.latest.rustChannels.nightly.rust.override {
   #extensions = [ "rust-src" "rust-analysis" "rustfmt-preview" "clippy-preview"];
   #});
@@ -33,27 +31,21 @@ let
   #)
   #];
   #};
-
   # The root directory of this project
   SHELLCASTER_ROOT = toString ./shellcaster;
-
   # For env_logger
   SC_LOG = "debug";
-
   # Keep project-specific shell commands local
-  HISTFILE = "${toString ./.}/.bash_history";
+  HISTFILE = "${ toString ./. }/.bash_history";
   # Only in development shell
-
   # Needed for racer “jump to definition” editor support
   # In Emacs with `racer-mode`, you need to set
   # `racer-rust-src-path` to `nil` for it to pick
   # up the environment variable with `direnv`.
-  RUST_SRC_PATH = "${pkgs.rustc.src}/lib/rustlib/x86_64-unknown-linux-gnu/lib/";
+  RUST_SRC_PATH = "${ pkgs.rustc.src }/lib/rustlib/x86_64-unknown-linux-gnu/lib/";
   # Set up a local directory to install binaries in
-  CARGO_INSTALL_ROOT = "${SHELLCASTER_ROOT}/.cargo";
-
+  CARGO_INSTALL_ROOT = "${ SHELLCASTER_ROOT }/.cargo";
   RUST_BACKTRACE = 1;
-
   buildInputs = [
     #pkgs.cargo
     #pkgs.rustc
@@ -63,7 +55,6 @@ let
     #unstable.rust-analyzer
     #ruststable
     rustChan
-
     pkgs.niv
     pkgs.lorri
     pkgs.nixpkgs-fmt
@@ -71,25 +62,21 @@ let
     pkgs.direnv
     pkgs.shellcheck
   ];
-
   nativeBuildInputs = [ pkgs.ncurses6 pkgs.pkg-config pkgs.openssl pkgs.sqlite ];
-
 in
-
-pkgs.mkShell {
-  name = "shellcaster";
-  # rust analyzer seems to need them
-  # as nativeBuildInputs
-  src = ./shellcaster;
-
-  inherit nativeBuildInputs;
-  inherit buildInputs;
-
-  inherit RUST_BACKTRACE;
-  inherit RUST_SRC_PATH;
-  inherit SC_LOG;
-
-  shellHook = ''
+pkgs.mkShell
+  {
+    name = "shellcaster";
+    # rust analyzer seems to need them
+    # as nativeBuildInputs
+    src = ./shellcaster;
+    inherit nativeBuildInputs;
+    inherit buildInputs;
+    inherit RUST_BACKTRACE;
+    inherit RUST_SRC_PATH;
+    inherit SC_LOG;
+    shellHook =
+      ''
       # - from lorri project -
       # we can only output to stderr in the shellHook,
       # otherwise direnv `use nix` does not work.
@@ -98,13 +85,16 @@ pkgs.mkShell {
       exec 1>&2 # make stdout (1) an alias for stderr (2)
 
       # watch the output to add the binary once it's built
-      export PATH="${SHELLCASTER_ROOT}/target/debug:$PATH"
+      export PATH="${ SHELLCASTER_ROOT }/target/debug:$PATH"
 
-      ${pkgs.lib.optionalString isDevelopmentShell ''
-      echo "shellcaster (sc)" | ${pkgs.figlet}/bin/figlet | ${pkgs.lolcat}/bin/lolcat
-    ''}
+      ${
+        pkgs.lib.optionalString
+          isDevelopmentShell
+          ''
+          echo "shellcaster (sc)" | ${ pkgs.figlet }/bin/figlet | ${ pkgs.lolcat }/bin/lolcat
+          ''
+      }
       # restore stdout and close 3
       exec 1>&3-
-  '';
-
-}
+      '';
+  }
