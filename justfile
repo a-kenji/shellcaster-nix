@@ -1,3 +1,6 @@
+fmt:
+	nix develop .#fmtShell --command treefmt
+
 flake-ci:
     git branch -D update_flake_lock_action
     git fetch origin
