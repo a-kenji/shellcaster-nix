@@ -49,18 +49,17 @@
         #cargoOptions = opts: opts ++ [ "--features" "sqlite_bundled" ];
         RUST_BACKTRACE = 1;
       in rec {
-        packages.shellcaster =
+        packages.default =
           naersk-lib.buildPackage
           {
             pname = "shellcaster";
             root = shellcaster;
             inherit nativeBuildInputs;
           };
-        defaultPackage = packages.shellcaster;
         apps.shellcaster = flake-utils.lib.mkApp {drv = packages.shellcaster;};
         defaultApp = apps.shellcaster;
         devShells = {
-          shellcaster =
+          default =
             pkgs.mkShell
             {
               name = "shellcaster-env";
@@ -74,7 +73,6 @@
               buildInputs = fmtInputs;
             };
         };
-        devShell = devShells.shellcaster;
       }
     );
 }
