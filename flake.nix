@@ -56,8 +56,9 @@
             root = shellcaster;
             inherit nativeBuildInputs;
           };
-        apps.shellcaster = flake-utils.lib.mkApp {drv = packages.shellcaster;};
-        defaultApp = apps.shellcaster;
+        # apps.shellcaster = flake-utils.lib.mkApp {drv = packages.shellcaster;};
+        apps.default = flake-utils.lib.mkApp {drv = packages.default;};
+        defaultApp = packages.default;
         devShells = {
           default =
             pkgs.mkShell
